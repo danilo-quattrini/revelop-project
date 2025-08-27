@@ -14,5 +14,6 @@ take all the data from the API: https://jsonplaceholder.typicode.com/posts%60
 - Then I will save all of them inside the file [post.json](post.json).
 
 ## Analyze data from the JSON 
-- calculate the numbers of posts written by each user (identified by the userId)
-- identify the user with the max amount of post
+- Calculate the numbers of posts written by each user (identified by the userId)
+- Identify the user with the max amount of post.
+- We save the data inside the file [analysis_results.json]() with ID the userId and the value the amount of post for each user.  
