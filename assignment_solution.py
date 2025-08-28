@@ -106,6 +106,24 @@ def count_post(post_list):
     return user_post_tracker
 
 def find_top_user(user_posts, post_list):
+    """
+           This function finds the user with the most number of posts.
+
+           Parameters:
+               post_list (list): the list of post
+               user_posts (dict): the list with their number of posts
+           Return:
+               dict: dictionary containing the userId and the number of posts for each of them
+
+            Search from all the user_posts, the one that has the biggest
+            number of posts with the function max, then we find the user_id related to the max_posts.
+
+            Inside the list num_post[], we save all the posts associated with the user, and we get only
+            the first five ones with the list operand [:5].
+
+            In the end, those five posts we get from the list we save the title and the summary of the
+            posts, the summary is delimited with [:50] words.
+    """
     top_users = {}
     user_id = 0
     num_element_post = []
