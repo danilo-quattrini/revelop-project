@@ -70,6 +70,16 @@ Functions I used to analyze the data inside JSON file:
     - count_post(post_list) return user_post_count: we take a list of dict of user 
     and we check if the user is not already inside the new dict we initialize the first
     post counter to 1, otherwise we increment the value related to the user.
+    
+    - find_top_user(user_posts, post_list) return top_user: we save our result inside the dict 
+      top_users, but first we search from all the user_posts, the one which has the biggest
+      number of post with the function max, then we find the user_id related to the max_posts.
+      
+      Inside the list num_post[], we save all the post associated with the user and we get only
+      the first five one with the list operand [:5].
+      
+      In the end, those five post we get from the list we save the title and the summary of the
+      posts, the summary is delimited with [:50] words.
 """
 def count_post(post_list):
     user_post_tracker = {}
