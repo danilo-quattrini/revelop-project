@@ -19,3 +19,8 @@ take all the data from the API: https://jsonplaceholder.typicode.com/posts%60
 - Identify the user with the max amount of post.
 - We save the data inside the file [analysis_results.json](analysis_results.json) with ID the userId and the value the amount of post for each user.
 - Separated them with the dict `analysis_result` with the key `user_post_counts`, `top_user` and `keyword_search_results` 
+
+## Find data from the JSON
+-  Implemented a function `search_post` where we insert a key-word or a set of them and search if the key is in the body or 
+inside the title.
+-  The function returns a set of posts that they are equal to the key.  
