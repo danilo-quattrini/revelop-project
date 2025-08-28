@@ -9,14 +9,14 @@ import requests
 import json
 import os
 
-API_URL = "https://jsonplaceholder.typicode.com/posts%60" # In the var we save the URL of the API we want to access
+API_URL = "https://jsonplaceholder.typicode.com/posts" # In the var we save the URL of the API we want to access
 post_file = "posts.json"  # We define the JSON file where we save all the posts
 analysis_file = "analysis_results.json" # Defined the JSON file where we save all the result form the analysis
 # Define The dict for the presentation option of the datas
 content_analysis_results = {"user_post_counts": {} , "top_user": {}, "keyword_search_results": {}}
 
 # Defined the function to request the data from the API
-def get_datas(url):
+def get_data(url):
     # We send a GET request to the API where we ask to pick the data from the URL
     request = requests.get(url)
 
@@ -48,41 +48,26 @@ def retrieve_data(file):
 
 def write_data(file, new_data):
    # Check if the file exists and the size is less than or equal to zero
-   if os.path.exists(analysis_file) and os.path.getsize(analysis_file) == 0:
+   if os.path.exists(file) and os.path.getsize(file) == 0:
 
        # Then we write a new content inside the file
        with open(file, "w") as f:
           json.dump(new_data, f, indent=4)
 
    # In the other hand if the file has content, we append it
-   elif os.path.getsize(analysis_file) > 0:
+   elif os.path.getsize(file) > 0:
        with open(file, "r+") as f:
            # Load existing data into a dictionary
            old_data = retrieve_data(file)
 
            # Update the dict with the new data with the function .update()
            old_data.update(new_data)
-
+           # Add return to the first line
+           f.seek(0)
            # Write the updated data back to the file
            json.dump(old_data, f, indent=4)
 
-"""
-Functions I used to analyze the data inside JSON file:
-
-    - count_post(post_list) return user_post_count: we take a list of dict of user 
-    and we check if the user is not already inside the new dict we initialize the first
-    post counter to 1, otherwise we increment the value related to the user.
-    
-    - find_top_user(user_posts, post_list) return top_user: we save our result inside the dict 
-      top_users, but first we search from all the user_posts, the one which has the biggest
-      number of post with the function max, then we find the user_id related to the max_posts.
-      
-      Inside the list num_post[], we save all the post associated with the user and we get only
-      the first five one with the list operand [:5].
-      
-      In the end, those five post we get from the list we save the title and the summary of the
-      posts, the summary is delimited with [:50] words.
-"""
+# Functions to analyze the data inside a JSON file:
 def count_post(post_list):
     """
         This function takes a list of user and returns a num of post for each user
@@ -98,13 +83,13 @@ def count_post(post_list):
     """
     user_post_tracker = {}
     for post in post_list:
-        userId = post["userId"]
+        user_id = post["userId"]
         # if the user is not inside the dict, then we add the first one
         if post.get("userId") not in user_post_tracker:
-            user_post_tracker[userId] = 1
+            user_post_tracker[user_id] = 1
         else:
         # if it's already there, then we increase the value of the num of post
-            user_post_tracker[userId] += 1
+            user_post_tracker[user_id] += 1
     return user_post_tracker
 
 def find_top_user(user_posts, post_list):
@@ -124,7 +109,7 @@ def find_top_user(user_posts, post_list):
             the first five ones with the list operand [:5].
 
             In the end, those five posts we get from the list we save the title and the summary of the
-            posts, the summary is delimited with [:50] words.
+            posts, the summary is delimited with the first [:50] characters.
     """
     top_users = {}
     user_id = 0
@@ -191,48 +176,55 @@ def search_posts(post_list, keyword_list):
             post_copy["match_score"] = match_score
             results.append(post_copy)
     if not results:
-        print(f"The keyboard is not inside the posts")
+        print(f"The keyword is not inside the posts")
     # sort by score (descending)
     results.sort(key=lambda x: x["match_score"], reverse=True)
     return results
-"""
-Retrive data from the API:
-    - I just pass the API_URL inside th function where, I'm going to save all the data inside 
-    the file posts.json
-"""
-get_datas(API_URL)
 
-""" 
-Analyze the data:
+if __name__ == "__main__":
+    """
+    Retrive data from the API:
+        - I just pass the API_URL inside th function where, I'm going to save all the data inside 
+        the file posts.json
+    """
+    get_data(API_URL)
 
-    -  Calculate the numbers of posts written by each user (identified by the userId)
-    -  Save the datas inside a dict and write them into the file analysis_result.json 
-    -  Identify the user with the major amount of post
-"""
-# Where we save the data from the posts.json
-posts_list = retrieve_data(post_file)
-
-#  Get the number of posts for each user
-user_post_count = count_post(posts_list)
-
-# Identify the user with the major amount of post
-top_user = find_top_user(user_post_count, posts_list)
-"""
-Filter and find data inside the posts.json
-    - Implement a function search_post where we insert a value and search if it's in the body or 
-      inside the title, with the .split() function we can add multiple values inside the list,
-      separate with the space.
+    """ 
+    Analyze the data:
     
-    - The function return a list of post with the new key:pair value inside the dict
-      'match_score', where we see, how many times the post with the keyword or the set of them was found in it.  
-"""
-keywords = input("Enter the keywords you want to search: ").split()
-keyword_research_result = search_posts(posts_list, keywords)
-"""
-Archive data: 
-    
-    - Save the results of each function we mentioned before inside the list analysis_result
-    - Saved the data inside the file analysis_results.json
-"""
-content_analysis_results.update({"user_post_counts": user_post_count, "top_user": top_user, "keyword_search_results": keyword_research_result})
-write_data(analysis_file, content_analysis_results)
+        -  Calculate the numbers of posts written by each user (identified by the userId)
+        -  Save the datas inside a dict and write them into the file analysis_result.json 
+        -  Identify the user with the major amount of post
+    """
+    # Where we save the data from the posts.json
+    posts_list = retrieve_data(post_file)
+
+    #  Get the number of posts for each user
+    user_post_count = count_post(posts_list)
+
+    # Identify the user with the major amount of post
+    top_user = find_top_user(user_post_count, posts_list)
+    """
+    Filter and find data inside the posts.json
+        - Implement a function search_post where we insert a value and search if it's in the body or 
+          inside the title, with the .split() function we can add multiple values inside the list,
+          separate with the space.
+        
+        - The function return a list of post with the new key:pair value inside the dict
+          'match_score', where we see, how many times the post with the keyword or the set of them was found in it.  
+    """
+    keywords = input("Enter the keywords you want to search: ").split()
+    keyword_research_result = search_posts(posts_list, keywords)
+    """
+    Archive data: 
+        
+        - Save the results of each function we mentioned before inside the list analysis_result
+        - Saved the data inside the file analysis_results.json
+    """
+    content_analysis_results.update({
+        "user_post_counts": user_post_count,
+        "top_user": top_user,
+        "keyword_search_results": keyword_research_result
+    })
+    write_data(analysis_file, content_analysis_results)
+    print("Analysis complete. Results saved to analysis_results.json")
