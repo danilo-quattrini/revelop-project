@@ -149,6 +149,29 @@ def find_top_user(user_posts, post_list):
     return top_users
 
 def search_posts(post_list, keyword_list):
+    """
+        This function searches the post that has the keyword in the keyword list and returns
+        a list of post with a counter, where on each of them, identify how many times the
+        keyword was found in the post.
+
+        Parameters:
+            post_list (list): the list of post
+            keyword_list (list): the keyword we want to search
+
+        Return:
+
+        result (list) of the research made
+
+        In the function we take from the list of posts, the title and the body.
+        We convert them in the lower case with the function .lower(), to find
+        the occurrences that start with capital letters, then from each key inside the
+        list of keys we check if the key is inside the title or the body, then
+        we increase the variable match_score.
+
+        The variable is necessary to check if there were any occurrences inside the posts
+        we save the post with the variable match_score, inside the list, and we sort them with
+        the sort function.
+    """
     results = []
     for post in post_list:
         match_score = 0
