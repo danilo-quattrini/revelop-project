@@ -185,8 +185,11 @@ def search_posts(post_list, keyword_list):
                 match_score += title.count(key_search)
                 match_score += body.count(key_search)
         if match_score > 0:
-            post["match_score"] = match_score
-            results.append(post)
+            post_copy = post.copy()
+            post_copy["match_score"] = match_score
+            results.append(post_copy)
+    if not results:
+        print(f"The keyboard is not inside the posts")
     # sort by score (descending)
     results.sort(key=lambda x: x["match_score"], reverse=True)
     return results
