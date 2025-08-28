@@ -13,7 +13,7 @@ API_URL = "https://jsonplaceholder.typicode.com/posts%60" # In the var we save t
 post_file = "posts.json"  # We define the JSON file where we save all the posts
 analysis_file = "analysis_results.json" # Defined the JSON file where we save all the result form the analysis
 # Define The dict for the presentation option of the datas
-analysis_result = { "user_post_counts": {} , "top_user": {}, "keyword_search_results": {}}
+content_analysis_results = {"user_post_counts": {} , "top_user": {}, "keyword_search_results": {}}
 
 # Defined the function to request the data from the API
 def get_datas(url):
@@ -182,7 +182,7 @@ Analyze the data:
     -  Identify the user with the major amount of post
 """
 # Where we save the data from the posts.json
-posts_list = retrive_data(post_file)
+posts_list = retrieve_data(post_file)
 
 #  Get the number of posts for each user
 user_post_count = count_post(posts_list)
@@ -206,5 +206,5 @@ Archive data:
     - Save the results of each function we mentioned before inside the list analysis_result
     - Saved the data inside the file analysis_results.json
 """
-analysis_result.update({"user_post_counts": user_post_count, "top_user": top_user, "keyword_search_results": keyword_research_result})
-write_data(analysis_file,analysis_result)
+content_analysis_results.update({"user_post_counts": user_post_count, "top_user": top_user, "keyword_search_results": keyword_research_result})
+write_data(analysis_file, content_analysis_results)
