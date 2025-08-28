@@ -118,6 +118,25 @@ def find_top_user(user_posts, post_list):
     top_users.update({"userId": user_id, "total_post": max_posts, "titles": titles, "summaries": summaries })
     return top_users
 
+def search_posts(post_list, keyword_list):
+    results = []
+    for post in post_list:
+        match_score = 0
+        # convert the title and the body in lower case
+        title = post["title"].lower()
+        body = post["body"].lower()
+
+        for key_search in keyword_list:
+            key_search = key_search.lower()
+            if key_search in title or key_search in body:
+                match_score += title.count(key_search)
+                match_score += body.count(key_search)
+        if match_score > 0:
+            post["match_score"] = match_score
+            results.append(post)
+    # sort by score (descending)
+    results.sort(key=lambda x: x["match_score"], reverse=True)
+    return results
 """
 Retrive data from the API:
     - I just pass the API_URL inside th function where, I'm going to save all the data inside 
