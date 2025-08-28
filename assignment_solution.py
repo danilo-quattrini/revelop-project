@@ -82,6 +82,18 @@ Functions I used to analyze the data inside JSON file:
       posts, the summary is delimited with [:50] words.
 """
 def count_post(post_list):
+    """
+        This function takes a list of user and returns a num of post for each user
+
+        :parameter
+            post_list (list): the list of post
+        :return
+            dict: dictionary containing the userId and the number of posts for each of them
+
+        Take a list of posts, and checks if the user is not inside the list
+        we save it in dict user_post_tracker, otherwise we increment the value related to the user,
+        in that way we know for each user, how many posts he/she got.
+    """
     user_post_tracker = {}
     for post in post_list:
         userId = post["userId"]
