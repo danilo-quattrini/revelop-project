@@ -34,7 +34,7 @@ Divided the JSON operation in function where we have the:
     - write_data(file, data): The function to write data inside the JSON file + new check 
       for the file existence and the append operation.
 """
-def retrive_data(file):
+def retrieve_data(file):
     if  os.path.getsize(file) > 0:
         with open(file,"r") as f:
             data = json.load(f)
@@ -56,7 +56,7 @@ def write_data(file, new_data):
    elif os.path.getsize(analysis_file) > 0:
        with open(file, "r+") as f:
            # Load existing data into a dictionary
-           old_data = retrive_data(file)
+           old_data = retrieve_data(file)
 
            # Update the dict with the new data with the function .update()
            old_data.update(new_data)
