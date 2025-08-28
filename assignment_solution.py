@@ -96,7 +96,7 @@ def count_post(post_list):
 def find_top_user(user_posts, post_list):
     top_users = {}
     user_id = 0
-    num_post = []
+    num_element_post = []
     titles = []
     summaries = []
     max_posts = max(user_posts.values())
