@@ -3,21 +3,21 @@
 
  - requests: to retrive the datas from the API
  - json: where we will write the datas from the API
- - os: is a built-in module used to check the existence of a file or working with path
+ - os: is a built-in module used to check the existence of a file or working with paths
 """
 import requests
 import json
 import os
-from setuptools.command.bdist_egg import analyze_egg
 
 API_URL = "https://jsonplaceholder.typicode.com/posts%60" # In the var we save the URL of the API we want to access
 post_file = "posts.json"  # We define the JSON file where we save all the posts
 analysis_file = "analysis_results.json" # Defined the JSON file where we save all the result form the analysis
 # Define The dict for the presentation option of the datas
 analysis_result = { "user_post_counts": {} , "top_user": {}, "keyword_search_results": {}}
+
 # Defined the function to request the data from the API
 def get_datas(url):
-    # We send a GET request to the API where we ask to pick the datas from the URL
+    # We send a GET request to the API where we ask to pick the data from the URL
     request = requests.get(url)
 
     # The function .status_code helps us to check if the response of the GET request went well
@@ -106,10 +106,10 @@ def find_top_user(user_posts, post_list):
 
     # then we filter the posts for the user with the greatest number and save in the lis
     for post in post_list:
-        if post.get("userId") == user_id: num_post.append(post)
+        if post.get("userId") == user_id: num_element_post.append(post)
 
     # I grab the first five posts
-    first_five = num_post[:5]
+    first_five = num_element_post[:5]
     # I save the first five titles of the first five one
     for post in first_five:
         titles.append(post["title"])
@@ -151,18 +151,30 @@ Analyze the data:
     -  Save the datas inside a dict and write them into the file analysis_result.json 
     -  Identify the user with the major amount of post
 """
+# Where we save the data from the posts.json
 posts_list = retrive_data(post_file)
+
 #  Get the number of posts for each user
 user_post_count = count_post(posts_list)
 
 # Identify the user with the major amount of post
 top_user = find_top_user(user_post_count, posts_list)
-analysis_result.update({"user_post_counts": user_post_count, "top_user": top_user})
-
+"""
+Filter and find data inside the posts.json
+    - Implement a function search_post where we insert a value and search if it's in the body or 
+      inside the title, with the .split() function we can add multiple values inside the list,
+      separate with the space.
+    
+    - The function return a list of post with the new key:pair value inside the dict
+      'match_score', where we see, how many times the post with the keyword or the set of them was found in it.  
+"""
+keywords = input("Enter the keywords you want to search: ").split()
+keyword_research_result = search_posts(posts_list, keywords)
 """
 Archive data: 
     
+    - Save the results of each function we mentioned before inside the list analysis_result
     - Saved the data inside the file analysis_results.json
-
 """
+analysis_result.update({"user_post_counts": user_post_count, "top_user": top_user, "keyword_search_results": keyword_research_result})
 write_data(analysis_file,analysis_result)
