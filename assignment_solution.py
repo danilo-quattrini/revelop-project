@@ -24,6 +24,8 @@ def get_datas(url):
     if request.status_code == 200:
         json_data = request.json()
         write_data(post_file, json_data)
+    else:
+        print(f"Failed to fetch data, status code: {request.status_code}")
 
 """
 Divided the JSON operation in function where we have the:
